@@ -75,9 +75,16 @@ class TicTacToe:
                 return
 
             if self.player_turn == "X":
+
                 while True:
-                    px = int(input("Insert a X-Coordinate: "))
-                    py = int(input("Insert a Y-Coordinate: "))
+                    try:
+                        px = int(input("Insert a X-Coordinate: "))
+                        py = int(input("Insert a Y-Coordinate: "))
+                    except ValueError:
+                        print("Invalid Input")
+                        px = 3
+                        py = 3
+
 
                     if self.is_valid(px, py):
                         self.current_state[px][py] = "X"
@@ -88,8 +95,13 @@ class TicTacToe:
 
             elif self.player_turn == "O":
                 while True:
-                    px = int(input("Insert a X-Coordinate: "))
-                    py = int(input("Insert a Y-Coordinate: "))
+                    try:
+                        px = int(input("Insert a X-Coordinate: "))
+                        py = int(input("Insert a Y-Coordinate: "))
+                    except ValueError:
+                        print("Invalid Input")
+                        px = 3
+                        py = 3
 
                     if self.is_valid(px, py):
                         self.current_state[px][py] = "O"
