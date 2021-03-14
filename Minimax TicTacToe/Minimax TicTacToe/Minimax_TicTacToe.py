@@ -1,5 +1,6 @@
 import time
 
+
 class TicTacToe:
     def __init__(self):
         self.initialize_game()
@@ -17,6 +18,19 @@ class TicTacToe:
                 print('{}|'.format(self.current_state[i][j]), end=" ")
             print()
             print("---------")
+
+    def game_mode(self):
+        while True:
+            try:
+                mode = int(input("(1) fuer Einzelspieler (2) fuer Mehrspieler: "))
+            except ValueError:
+                mode = 0
+                print("Input not a Number")
+            if mode == 1 or mode == 2:
+                break
+
+        return mode
+
 
     def keyboard_input(self):
         try:
@@ -72,8 +86,63 @@ class TicTacToe:
 
         return "."
 
-    def play(self):
+    def max(self):
+        maxv = -2
+        px = None
+        py = None
+
+        result = self.is_end()
+
+        if result == "X":
+            return (-1, 0, 0)
+        elif result == "O":
+            return (1, 0, 0)
+        elif result == ".":
+            return (0, 0, 0)
+
+        for i in range(0, 3):
+            for j in range(0, 3):
+                if self.current_state[i][j] == ".":
+                    self.current_state[i][j] = "O"
+                    (m, min_i, min_j) = self.min()
+                    if m > maxv:
+                        maxv = m
+                        px = i
+                        py = j
+                    self.current_state[i][j] = "."
+        return (maxv, px, py)
+
+
+    def min(self):
+        minv = 2
+        px = None
+        py = None
+
+        result = self.is_end()
+
+        if result == "X":
+            return (-1, 0, 0)
+        elif result == "O":
+            return (1, 0, 0)
+        elif result == ".":
+            return (0, 0, 0)
+
+        for i in range(0, 3):
+            for j in range(0, 3):
+                if self.current_state[i][j] == ".":
+                    self.current_state[i][j] = "X"
+                    (m, max_i, max_j) = self.max()
+                    if m < minv:
+                        minv = m
+                        qx = i
+                        qy = j
+                    self.current_state[i][j] = "."
+
+        return (minv, px, py)
+
+    def play(self, mode):
         while True:
+
             self.draw_board()
             self.result = self.is_end()
 
@@ -89,7 +158,7 @@ class TicTacToe:
                 return
 
             if self.player_turn == "X":
-
+                print("X-Player: ")
                 while True:
                     px, py = self.keyboard_input()
 
@@ -100,7 +169,14 @@ class TicTacToe:
                     else:
                         print('Invalid Move, Try Again')
 
-            elif self.player_turn == "O":
+            elif self.player_turn == "O" and mode == 1:                
+                print("O-Player makes his move...")
+                (m, px, py) = self.max()
+                self.current_state[px][py] = "O"                
+                self.player_turn = "X"
+
+            elif self.player_turn == "O" and mode == 2:
+                print("O-Player: ")
                 while True:
                     px, py = self.keyboard_input()
 
@@ -110,12 +186,21 @@ class TicTacToe:
                         break
                     else:
                         print('Invalid Move, Try Again')
-        else:
-            print("Fatal Error!!!")
 
 
 Game = TicTacToe()
-Game.play()
 
+while True:
+    mode = Game.game_mode()
+    Game.play(mode)
+    while True:
+        r = input("New Round? (y/n): ")
+
+        if r == "Y" or r == "y":
+            break
+        elif r == "N" or r == "n":
+            exit(0)
+        else:
+            print("Invalid Input")
 
 
