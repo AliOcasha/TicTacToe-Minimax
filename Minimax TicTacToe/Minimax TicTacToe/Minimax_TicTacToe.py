@@ -18,6 +18,19 @@ class TicTacToe:
             print()
             print("---------")
 
+    def game_mode(self):
+        while True:
+            try:
+                mode = int(input("(1) fuer Einzelspieler (2) fuer Mehrspieler: "))
+            except ValueError:
+                mode = 0
+                print("Input not a Number")
+            if mode == 1 or mode == 2:
+                break
+
+        return mode
+
+
     def keyboard_input(self):
         try:
             px = int(input("Insert a X-Coordinate: "))
@@ -83,15 +96,13 @@ class TicTacToe:
             return (-1, 0, 0)
         elif result == "O":
             return (1, 0, 0)
-        elif result ==".":
+        elif result == ".":
             return (0, 0, 0)
-        else:
-            print("Fatal Error!")
 
         for i in range(0, 3):
             for j in range(0, 3):
                 if self.current_state[i][j] == ".":
-                    self.current_state[i][j] == "0"
+                    self.current_state[i][j] == "O"
                     (m, min_i, min_j) = self.min()
 
                     if m > maxv:
@@ -115,8 +126,6 @@ class TicTacToe:
             return (1, 0, 0)
         elif result == ".":
             return (0, 0, 0)
-        else:
-            print("Fatal Error!")
 
         for i in range(0, 3):
             for j in range(0, 3):
@@ -131,7 +140,7 @@ class TicTacToe:
                     self.current_state[i][j] = "."
         return (minv, px, py)
 
-    def play(self):
+    def play(self, mode):
         while True:
             self.draw_board()
             self.result = self.is_end()
@@ -159,7 +168,12 @@ class TicTacToe:
                     else:
                         print('Invalid Move, Try Again')
 
-            elif self.player_turn == "O":
+            elif self.player_turn == "O" and mode == 1:
+                (m, px, py) = self.max()
+                self.current_state[px][py] = "O"
+                self.player_turn = "X"
+
+            elif self.player_turn == "O" and mode == 2:
                 while True:
                     px, py = self.keyboard_input()
 
@@ -169,9 +183,8 @@ class TicTacToe:
                         break
                     else:
                         print('Invalid Move, Try Again')
-        else:
-            print("Fatal Error!!!")
 
 
 Game = TicTacToe()
-Game.play()
+mode = Game.game_mode()
+Game.play(mode)
