@@ -89,7 +89,7 @@ class TicTacToe:
         maxv = -2
         px = None
         py = None
-        
+
         result = self.is_end()
 
         if result == "X":
@@ -102,9 +102,8 @@ class TicTacToe:
         for i in range(0, 3):
             for j in range(0, 3):
                 if self.current_state[i][j] == ".":
-                    self.current_state[i][j] == "O"
+                    self.current_state[i][j] = "O"
                     (m, min_i, min_j) = self.min()
-
                     if m > maxv:
                         maxv = m
                         px = i
@@ -131,13 +130,13 @@ class TicTacToe:
             for j in range(0, 3):
                 if self.current_state[i][j] == ".":
                     self.current_state[i][j] = "X"
-                    (m, max_i, max_i) = self.max()
-
+                    (m, max_i, max_j) = self.max()
                     if m < minv:
                         minv = m
-                        px = i
-                        py = j
+                        qx = i
+                        qy = j
                     self.current_state[i][j] = "."
+
         return (minv, px, py)
 
     def play(self, mode):
