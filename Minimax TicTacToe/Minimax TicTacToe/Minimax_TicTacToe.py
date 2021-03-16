@@ -1,5 +1,5 @@
 import time
-
+import pygame as pg
 class TicTacToe:
     def __init__(self):
         self.initialize_game()
