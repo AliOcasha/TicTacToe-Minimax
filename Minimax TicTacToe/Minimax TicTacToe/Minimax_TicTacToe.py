@@ -85,7 +85,7 @@ class TicTacToe:
 
         return "."
 
-    def max(self):
+    def max(self, alpha, beta):
         maxv = -2
         px = None
         py = None
@@ -103,16 +103,21 @@ class TicTacToe:
             for j in range(0, 3):
                 if self.current_state[i][j] == ".":
                     self.current_state[i][j] = "O"
-                    (m, min_i, min_j) = self.min()
+                    (m, min_i, min_j) = self.min(alpha, beta)
                     if m > maxv:
                         maxv = m
                         px = i
                         py = j
                     self.current_state[i][j] = "."
+                    #alpha-beta-pruning
+                    if maxv >= beta:
+                        return (maxv, px, py)
+                    if maxv > alpha:
+                        alpha = maxv
         return (maxv, px, py)
 
 
-    def min(self):
+    def min(self, alpha, beta):
         minv = 2
         px = None
         py = None
@@ -130,12 +135,17 @@ class TicTacToe:
             for j in range(0, 3):
                 if self.current_state[i][j] == ".":
                     self.current_state[i][j] = "X"
-                    (m, max_i, max_j) = self.max()
+                    (m, max_i, max_j) = self.max(alpha, beta)
                     if m < minv:
                         minv = m
                         qx = i
                         qy = j
                     self.current_state[i][j] = "."
+                    #alpha-beta-pruning
+                    if minv <= alpha:
+                        return (minv, px, py)
+                    if minv < beta:
+                        beta = minv
 
         return (minv, px, py)
 
@@ -159,6 +169,7 @@ class TicTacToe:
             if self.player_turn == "X":
                 print("X-Player: ")
                 while True:
+
                     px, py = self.keyboard_input()
 
                     if self.is_valid(px, py):
@@ -170,7 +181,7 @@ class TicTacToe:
 
             elif self.player_turn == "O" and mode == 1:                
                 print("O-Player makes his move...")
-                (m, px, py) = self.max()
+                (m, px, py) = self.max(-2,2)
                 self.current_state[px][py] = "O"                
                 self.player_turn = "X"
 
