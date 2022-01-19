@@ -2,4 +2,5 @@
 *.pyproj
 *.suo
 
-.vscode
+/.vscode
+*.json
